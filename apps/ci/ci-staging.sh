@@ -7,8 +7,8 @@
 set -e
 
 export DEBIAN_FRONTEND=noninteractive
-
-sudo apt-get -y install screen
+dpkg --configure -a
+apt-get -y install screen
 killall authserver || echo "Authserver was not running."
 killall worldserver || echo "Worldserver was not running."
 ./acore.sh init
