@@ -6,6 +6,7 @@
 
 set -e
 
+export DEBIAN_FRONTEND=noninteractive
 
 sudo apt-get -y install screen
 killall authserver || echo "Authserver was not running."
