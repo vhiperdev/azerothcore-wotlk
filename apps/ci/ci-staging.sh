@@ -8,8 +8,8 @@ set -e
 
 
 sudo apt-get -y install screen
-killall -9 authserver 2>/dev/null
-killall -9 worldserver 2>/dev/null
+killall authserver || echo "Authserver was not running."
+killall worldserver || echo "Worldserver was not running."
 ./acore.sh init
 ./acore.sh "client-data"
 screen -S authserver -d -m ./acore.sh run-authserver
