@@ -6,12 +6,13 @@
 
 set -e
 
-bash -c 'time (\
- sudo apt-get -y install screen \
- && killall -9 authserver 2>/dev/null && killall -9 worldserver 2>/dev/null \
- && ./acore.sh init \
- && ./acore.sh "client-data" \
- && screen -S authserver -d -m ./acore.sh run-authserver \
- && screen -S worldserver -d -m ./acore.sh run-worldserver )'
+
+sudo apt-get -y install screen
+killall -9 authserver 2>/dev/null
+killall -9 worldserver 2>/dev/null
+./acore.sh init
+./acore.sh "client-data"
+screen -S authserver -d -m ./acore.sh run-authserver
+screen -S worldserver -d -m ./acore.sh run-worldserver
 
 
