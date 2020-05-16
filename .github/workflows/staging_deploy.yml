@@ -22,3 +22,4 @@ jobs:
         script: |
           apt-get install -y git
           git clone "https://github.com/azerothcore/azerothcore-wotlk" -b staging 2> /dev/null && cd azerothcore-wotlk || (cd "azerothcore-wotlk" ; git pull)
+          bash ./apps/ci/ci-staging.sh
