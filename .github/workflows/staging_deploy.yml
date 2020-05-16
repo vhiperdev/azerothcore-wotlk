@@ -21,5 +21,9 @@ jobs:
         proxy_key : ${{ secrets.STAGING_KEY }}
         script: |
           apt-get install -y git
-          git clone "https://github.com/azerothcore/azerothcore-wotlk" -b staging 2> /dev/null && cd azerothcore-wotlk || (cd "azerothcore-wotlk" && git reset --hard && git pull)
+          git clone "https://github.com/azerothcore/azerothcore-wotlk" -b staging 2> /dev/null
+          cd "azerothcore-wotlk"
+          git checkout staging
+          git reset --hard origin/staging
+          git pull origin staging
           bash ./apps/ci/ci-staging.sh
