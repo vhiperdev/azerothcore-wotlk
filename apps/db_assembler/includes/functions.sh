@@ -39,26 +39,24 @@ function dbasm_mysqlExec() {
                     sudo -h "$MYSQL_HOST" "$DB_MYSQL_EXEC" -e "UPDATE mysql.user SET authentication_string=PASSWORD('${PROMPT_PASS}'), plugin='mysql_native_password' WHERE User='${PROMPT_USER}'; FLUSH PRIVILEGES;"
                 fi
             fi
+        fi
 
-            # create configured account if not exists
-            "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "CREATE USER '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASS}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;"
-            "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "GRANT CREATE ON *.* TO '${MYSQL_USER}'@'${MYSQL_HOST}'  WITH GRANT OPTION;"
-            for db in ${DATABASES[@]}
-            do
-                local _uc=${db^^}
-                local _name="DB_"$_uc"_CONF"
-                local _confs=${!_name}
+        # create configured account if not exists
+        "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "CREATE USER '${MYSQL_USER}'@'${MYSQL_HOST}' IDENTIFIED BY '${MYSQL_PASS}' WITH MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0;"
+        "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "GRANT CREATE ON *.* TO '${MYSQL_USER}'@'${MYSQL_HOST}'  WITH GRANT OPTION;"
+        for db in ${DATABASES[@]}
+        do
+            local _uc=${db^^}
+            local _name="DB_"$_uc"_CONF"
+            local _confs=${!_name}
 
-                local _name="DB_"$_uc"_NAME"
-                local _dbname=${!_name}
+            local _name="DB_"$_uc"_NAME"
+            local _dbname=${!_name}
 
-                eval $_confs
-                echo "Grant permissions for ${MYSQL_USER}'@'${MYSQL_HOST} to ${_dbname}"
-                "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "GRANT ALL PRIVILEGES ON ${_dbname}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}'  WITH GRANT OPTION;"
-            done
-		else
-			exit
-		fi
+            eval $_confs
+            echo "Grant permissions for ${MYSQL_USER}'@'${MYSQL_HOST} to ${_dbname}"
+            "$DB_MYSQL_EXEC"  -h "$MYSQL_HOST" -u "$PROMPT_USER" $options -e "GRANT ALL PRIVILEGES ON ${_dbname}.* TO '${MYSQL_USER}'@'${MYSQL_HOST}'  WITH GRANT OPTION;"
+        done
 	fi
 }
 
