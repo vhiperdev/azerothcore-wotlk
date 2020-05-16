@@ -19,6 +19,7 @@ jobs:
         port: ${{ secrets.STAGING_PORT }}
         proxy_port : ${{ secrets.STAGING_PORT }}
         proxy_key : ${{ secrets.STAGING_KEY }}
+        command_timeout: 360m
         script: |
           apt-get install -y git
           git clone "https://github.com/azerothcore/azerothcore-wotlk" -b staging 2> /dev/null
