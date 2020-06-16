@@ -303,7 +303,7 @@ function dbasm_db_import() {
 
 
     # TODO: remove this line after we squash our DB updates
-    "$DB_MYSQL_EXEC" -h "$MYSQL_HOST" -u "$MYSQL_USER" -e "SET GLOBAL max_allowed_packet=128*1024*1024;"
+    # "$DB_MYSQL_EXEC" -h "$MYSQL_HOST" -u "$MYSQL_USER" -e "SET GLOBAL max_allowed_packet=128*1024*1024;"
 
 	"$DB_MYSQL_EXEC" -h "$MYSQL_HOST" -u "$MYSQL_USER" --default-character-set=utf8 "$dbname" < "${OUTPUT_FOLDER}${database}_${type}.sql"
 
