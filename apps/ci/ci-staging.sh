@@ -12,7 +12,8 @@ apt-get -y install screen
 killall authserver || echo "Authserver was not running."
 killall worldserver || echo "Worldserver was not running."
 ./acore.sh init
-./acore.sh "client-data"
+# uncomment when we need to download new client data
+# ./acore.sh "client-data"
 screen -S authserver -d -m ./acore.sh run-authserver
 screen -S worldserver -d -m ./acore.sh run-worldserver
 
