@@ -480,15 +480,6 @@ public:
             return false;
         }
 
-        SpellScriptsBounds bounds = sObjectMgr->GetSpellScriptsBounds(spellId);
-        uint32 spellDifficultyId = sSpellMgr->GetSpellDifficultyId(spellId);
-        if (bounds.first != bounds.second || spellDifficultyId)
-        {
-            handler->PSendSysMessage("Aura %u cannot be applied using a command!", spellId);
-            handler->SetSentErrorMessage(true);
-            return false;
-        }
-
         Aura::TryRefreshStackOrCreate(spellInfo, MAX_EFFECT_MASK, target, target);
 
         return true;
@@ -1466,8 +1457,23 @@ public:
         // Subtract
         if (count < 0)
         {
-            playerTarget->DestroyItemCount(itemId, -count, true, false);
-            handler->PSendSysMessage(LANG_REMOVEITEM, itemId, -count, handler->GetNameLink(playerTarget).c_str());
+            if (!playerTarget->HasItemCount(itemId, 0))
+            {
+                // output that player don't have any items to destroy
+                handler->PSendSysMessage(LANG_REMOVEITEM_FAILURE, handler->GetNameLink(playerTarget).c_str(), itemId);
+            }
+            else if (!playerTarget->HasItemCount(itemId, -count))
+            {
+                // output that player don't have as many items that you want to destroy
+                handler->PSendSysMessage(LANG_REMOVEITEM_ERROR, handler->GetNameLink(playerTarget).c_str(), itemId);
+            }
+            else
+            {
+                // output successful amount of destroyed items
+                playerTarget->DestroyItemCount(itemId, -count, true, false);
+                handler->PSendSysMessage(LANG_REMOVEITEM, itemId, -count, handler->GetNameLink(playerTarget).c_str());
+            }
+
             return true;
         }
 
